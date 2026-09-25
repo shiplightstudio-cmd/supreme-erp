@@ -1,0 +1,6 @@
+[submodule "supreme-erp-fe"]
+	path = supreme-erp-fe
+	url = https://gitlab.com/supreme-erp/supreme-erp-fe.git
+[submodule "supreme-erp-be"]
+	path = supreme-erp-be
+	url = https://gitlab.com/supreme-erp/supreme-erp-be.git
