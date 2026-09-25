@@ -5,14 +5,14 @@ grant all privileges on * . * to 'admin'@'localhost';
 ALTER USER 'admin'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'admin';
 flush PRIVILEGES;
 
-drop schema if exists `soen_390_db`;
+drop schema if exists `supreme_erp_db`;
 
-create schema `soen_390_db`;
+create schema `supreme_erp_db`;
 
-USE `soen_390_db`;
+USE `supreme_erp_db`;
 
 -- Table to store the users.
-CREATE TABLE `soen_390_db`.`user` (
+CREATE TABLE `supreme_erp_db`.`user` (
   `userID` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `role` VARCHAR(45) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE `soen_390_db`.`user` (
   collate = utf8mb4_unicode_ci;
 
 -- Table to store the customers.
-CREATE TABLE `soen_390_db`.`customer` (
+CREATE TABLE `supreme_erp_db`.`customer` (
   `customerId` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE `soen_390_db`.`customer` (
 
 -- Table to store the raw materials, semi-finished goods, and finished goods all
 -- under one table.
-CREATE TABLE `soen_390_db`.`inventory_good` (
+CREATE TABLE `supreme_erp_db`.`inventory_good` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `type` VARCHAR(45) NOT NULL,
@@ -53,70 +53,70 @@ CREATE TABLE `soen_390_db`.`inventory_good` (
   collate = utf8mb4_unicode_ci;
 
 -- Table to store the raw goods (materials) needed to build the semi-finished goods.
-CREATE TABLE `soen_390_db`.`raw_good` (
+CREATE TABLE `supreme_erp_db`.`raw_good` (
   `id` INT NOT NULL,
   `vendor` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `rawMaterialInventoryItemIDForeignKey`
     FOREIGN KEY (`id`)
-    REFERENCES `soen_390_db`.`inventory_good` (`id`)
+    REFERENCES `supreme_erp_db`.`inventory_good` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
   
   collate = utf8mb4_unicode_ci;
 
 -- Table to store the semi-finished goods needed to build the finished goods.
-CREATE TABLE `soen_390_db`.`semi-finished_good` (
+CREATE TABLE `supreme_erp_db`.`semi-finished_good` (
   `id` INT NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `semiFinishedInventoryItemIDForeignKey`
     FOREIGN KEY (`id`)
-    REFERENCES `soen_390_db`.`inventory_good` (`id`)
+    REFERENCES `supreme_erp_db`.`inventory_good` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
   
   collate = utf8mb4_unicode_ci;
 
 -- Table to store the finished goods that will be sold to the customers.
-CREATE TABLE `soen_390_db`.`finished_good` (
+CREATE TABLE `supreme_erp_db`.`finished_good` (
   `id` INT NOT NULL,
   `price` DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `finishedInventoryItemIDForeignKey`
     FOREIGN KEY (`id`)
-    REFERENCES `soen_390_db`.`inventory_good` (`id`)
+    REFERENCES `supreme_erp_db`.`inventory_good` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
   
   collate = utf8mb4_unicode_ci;
 
 -- Table to store the various properties of the inventory items.
-CREATE TABLE `soen_390_db`.`property_of_good` (
+CREATE TABLE `supreme_erp_db`.`property_of_good` (
   `compositeId` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `value` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`compositeId`, `name`),
   CONSTRAINT `inventoryItemIDPropertyForeignKey`
     FOREIGN KEY (`compositeId`)
-    REFERENCES `soen_390_db`.`inventory_good` (`id`)
+    REFERENCES `supreme_erp_db`.`inventory_good` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
     
 	collate = utf8mb4_unicode_ci;
 
-CREATE TABLE `soen_390_db`.`composition_of_good` (
+CREATE TABLE `supreme_erp_db`.`composition_of_good` (
   `compositeId` INT NOT NULL,
   `componentId` INT NOT NULL,
   `quantity` INT NOT NULL,
   PRIMARY KEY (`compositeId`, `componentId`),
   CONSTRAINT `inventoryItemIDComposedOfForeignKey`
     FOREIGN KEY (`compositeId`)
-    REFERENCES `soen_390_db`.`inventory_good` (`id`)
+    REFERENCES `supreme_erp_db`.`inventory_good` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `madeFromInventoryItemIDComposedOfForeignKey`
     FOREIGN KEY (`componentId`)
-    REFERENCES `soen_390_db`.`inventory_good` (`id`)
+    REFERENCES `supreme_erp_db`.`inventory_good` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `notMadeFromSameItem`
@@ -126,7 +126,7 @@ CREATE TABLE `soen_390_db`.`composition_of_good` (
 
 -- Table to store the different orders given by the manufacturing division
 -- in order to buy raw goods and to create semi-finished and finished goods.
-CREATE TABLE `soen_390_db`.`manufacturing_order` (
+CREATE TABLE `supreme_erp_db`.`manufacturing_order` (
   `orderId` INT NOT NULL AUTO_INCREMENT,
   `status` VARCHAR(45) NOT NULL,
   `totalCost` DECIMAL(10,2) NOT NULL,
@@ -142,7 +142,7 @@ CREATE TABLE `soen_390_db`.`manufacturing_order` (
 
 -- Table to store the bought raw goods and to store the various semi-finished goods that
 -- the manufacturing division has given an order to produce for each manufacturing order.
-CREATE TABLE `soen_390_db`.`manufacturing_ordered_good` (
+CREATE TABLE `supreme_erp_db`.`manufacturing_ordered_good` (
   `orderId` INT NOT NULL,
   `compositeId` INT NOT NULL,
   `totalCost` DECIMAL(10,2) NOT NULL,
@@ -150,19 +150,19 @@ CREATE TABLE `soen_390_db`.`manufacturing_ordered_good` (
   PRIMARY KEY (`orderId`, `compositeId`),
   CONSTRAINT `manufacturingOrderIDForeignKey`
     FOREIGN KEY (`orderId`)
-    REFERENCES `soen_390_db`.`manufacturing_order` (`orderId`)
+    REFERENCES `supreme_erp_db`.`manufacturing_order` (`orderId`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `orderedGoodInventoryItemIDForeignKey`
     FOREIGN KEY (`compositeId`)
-    REFERENCES `soen_390_db`.`inventory_good` (`id`)
+    REFERENCES `supreme_erp_db`.`inventory_good` (`id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
     
 	collate = utf8mb4_unicode_ci;
 
 -- Table to store the different orders of finished goods put in by customers.
-CREATE TABLE `soen_390_db`.`customer_order` (
+CREATE TABLE `supreme_erp_db`.`customer_order` (
   `orderId` INT NOT NULL AUTO_INCREMENT,
   `customerId` INT NOT NULL,
   `status` VARCHAR(45) NOT NULL,
@@ -172,7 +172,7 @@ CREATE TABLE `soen_390_db`.`customer_order` (
   PRIMARY KEY (`orderId`),
   CONSTRAINT `customerIdForeignKey`
     FOREIGN KEY (`customerId`)
-    REFERENCES `soen_390_db`.`customer` (`customerId`)
+    REFERENCES `supreme_erp_db`.`customer` (`customerId`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `validItemStatusCustomerOrder`
@@ -181,7 +181,7 @@ CREATE TABLE `soen_390_db`.`customer_order` (
   collate = utf8mb4_unicode_ci;
 
 -- Table to store events
-CREATE TABLE `soen_390_db`.`event` (
+CREATE TABLE `supreme_erp_db`.`event` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `date` DATE NOT NULL,
   `time` TIME NOT NULL,
@@ -191,7 +191,7 @@ CREATE TABLE `soen_390_db`.`event` (
 	collate = utf8mb4_unicode_ci;
 
 -- Table to store goals
-CREATE TABLE `soen_390_db`.`goal` (
+CREATE TABLE `supreme_erp_db`.`goal` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `completed` BOOLEAN NOT NULL,
   `targetDate` DATE NOT NULL,
@@ -204,7 +204,7 @@ CREATE TABLE `soen_390_db`.`goal` (
 
 
 -- Table to store the various finished goods that are associated with each customer order.
-CREATE TABLE `soen_390_db`.`customer_ordered_good` (
+CREATE TABLE `supreme_erp_db`.`customer_ordered_good` (
   `orderId` INT NOT NULL,
   `compositeId` INT NOT NULL,
   `totalPrice` DECIMAL(10,2) NOT NULL,
@@ -212,19 +212,19 @@ CREATE TABLE `soen_390_db`.`customer_ordered_good` (
   PRIMARY KEY (`orderId`, `compositeId`),
   CONSTRAINT `customerOrderIDForeignKey`
     FOREIGN KEY (`orderId`)
-    REFERENCES `soen_390_db`.`customer_order` (`orderId`)
+    REFERENCES `supreme_erp_db`.`customer_order` (`orderId`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `ordersInventoryItemIDForeignKey`
     FOREIGN KEY (`compositeId`)
-    REFERENCES `soen_390_db`.`inventory_good` (`id`)
+    REFERENCES `supreme_erp_db`.`inventory_good` (`id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
     
 	collate = utf8mb4_unicode_ci;
 
 -- Table to store the different machines that will be used to execute the orders.
-CREATE TABLE `soen_390_db`.`machine` (
+CREATE TABLE `supreme_erp_db`.`machine` (
   `machineId` INT NOT NULL AUTO_INCREMENT,
   `status` VARCHAR(45) NOT NULL,
   `numberOrderCompleted` INT NOT NULL DEFAULT 0,
@@ -235,18 +235,18 @@ CREATE TABLE `soen_390_db`.`machine` (
   collate = utf8mb4_unicode_ci;
 
 -- Table where we store the order on which a machine is working on.
-CREATE TABLE `soen_390_db`.`schedule` (
+CREATE TABLE `supreme_erp_db`.`schedule` (
   `machineId` INT NOT NULL,
   `orderId` INT NOT NULL,
   PRIMARY KEY (`machineId`, `orderId`),
   CONSTRAINT `scheduleMachineIdForeignKey`
     FOREIGN KEY (`machineId`)
-    REFERENCES `soen_390_db`.`machine` (`machineId`)
+    REFERENCES `supreme_erp_db`.`machine` (`machineId`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `scheduleManufacturingOrderIdForeignKey`
     FOREIGN KEY (`orderId`)
-    REFERENCES `soen_390_db`.`manufacturing_order` (`orderId`)
+    REFERENCES `supreme_erp_db`.`manufacturing_order` (`orderId`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
   
@@ -493,7 +493,7 @@ VALUES
 -- https://www.digitalocean.com/community/tutorials/how-to-create-a-new-user-and-grant-permissions-in-mysql
 
 
-CREATE TABLE IF NOT EXISTS `soen_390_db`.`goods` (
+CREATE TABLE IF NOT EXISTS `supreme_erp_db`.`goods` (
   `id` INT NOT NULL,
   `schema` INT NULL,
   `quality` VARCHAR(255) NULL,
@@ -502,7 +502,7 @@ CREATE TABLE IF NOT EXISTS `soen_390_db`.`goods` (
   INDEX `schema_idx` (`schema` ASC) VISIBLE,
   CONSTRAINT `schema`
     FOREIGN KEY (`schema`)
-    REFERENCES `soen_390_db`.`inventory_good` (`id`)
+    REFERENCES `supreme_erp_db`.`inventory_good` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
