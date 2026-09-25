@@ -4,3 +4,6 @@
 [submodule "supreme-erp-be"]
 	path = supreme-erp-be
 	url = https://gitlab.com/supreme-erp/supreme-erp-be.git
+[submodule "supreme-erp-storefront"]
+	path = supreme-erp-storefront
+	url = https://gitlab.com/supreme-erp/supreme-erp-storefront.git
