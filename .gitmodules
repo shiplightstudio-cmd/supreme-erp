@@ -7,3 +7,6 @@
 [submodule "supreme-erp-storefront"]
 	path = supreme-erp-storefront
 	url = https://gitlab.com/supreme-erp/supreme-erp-storefront.git
+[submodule "supreme-erp-accounting"]
+	path = supreme-erp-storefront
+	url = https://gitlab.com/supreme-erp/supreme-erp-accounting.git
