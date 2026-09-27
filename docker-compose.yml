@@ -1,0 +1,111 @@
+name: supreme-erp
+
+services:
+  frontend:
+    image: supreme-erp/frontend:local
+    build:
+      context: ./supreme-erp-fe
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_started
+    ports:
+      - "3000:80"
+
+  storefront:
+    image: supreme-erp/storefront:local
+    build:
+      context: ./supreme-erp-storefront
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_started
+    ports:
+      - "3001:80"
+
+  accounting:
+    image: supreme-erp/accounting:local
+    build:
+      context: ./supreme-erp-accounting
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_started
+    ports:
+      - "3002:80"
+
+  backend:
+    image: supreme-erp/backend:local
+    build:
+      context: ./supreme-erp-be
+      dockerfile: Dockerfile
+    env_file:
+      - ./supreme-erp-be/.env
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MYSQL_HOSTNAME: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: ${MYSQL_USER:-supreme_erp}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-supreme_erp_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-supreme_erp}
+    ports:
+      - "5000:5000"
+
+  mysql:
+    image: mysql:9.7.2
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-supreme_erp}
+      MYSQL_USER: ${MYSQL_USER:-supreme_erp}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-supreme_erp_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-replace-with-a-long-random-root-password}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    command: --log-bin-trust-function-creators=1
+
+  # n8n:
+  #   image: n8nio/n8n:2.40.7
+  #   restart: unless-stopped
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   environment:
+  #     DB_TYPE: postgresdb
+  #     DB_POSTGRESDB_HOST: postgres
+  #     DB_POSTGRESDB_PORT: 5432
+  #     DB_POSTGRESDB_DATABASE: ${POSTGRES_DB:-supreme_erp}
+  #     DB_POSTGRESDB_USER: ${POSTGRES_USER:-supreme_erp}
+  #     DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD:-supreme_erp_password}
+  #     N8N_HOST: ${N8N_HOST:-localhost}
+  #     N8N_PORT: 5678
+  #     N8N_PROTOCOL: ${N8N_PROTOCOL:-http}
+  #     N8N_EDITOR_BASE_URL: ${N8N_EDITOR_BASE_URL:-http://localhost:5678/}
+  #     WEBHOOK_URL: ${WEBHOOK_URL:-http://localhost:5678/}
+  #     GENERIC_TIMEZONE: ${GENERIC_TIMEZONE:-Asia/Jakarta}
+  #     TZ: ${TZ:-Asia/Jakarta}
+  #     N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:-change-this-to-a-long-random-secret}
+  #     N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+  #   ports:
+  #     - "5678:5678"
+  #   volumes:
+  #     - n8n_data:/home/node/.n8n
+
+volumes:
+  # n8n_data:
+  mysql_data:
