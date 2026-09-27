@@ -1,19 +1,19 @@
 [submodule "supreme-erp-fe"]
 	path = supreme-erp-fe
-	url = https://gitlab.com/supreme-erp/supreme-erp-fe.git
+	url = https://github.com/shiplightstudio-cmd/supreme-erp-fe.git
 	
 [submodule "supreme-erp-be"]
 	path = supreme-erp-be
-	url = https://gitlab.com/supreme-erp/supreme-erp-be.git
+	url = https://github.com/shiplightstudio-cmd/supreme-erp-be.git
 
 [submodule "supreme-erp-storefront"]
 	path = supreme-erp-storefront
-	url = https://gitlab.com/supreme-erp/supreme-erp-storefront.git
+	url = https://github.com/shiplightstudio-cmd/supreme-storefront.git
 	
 [submodule "supreme-erp-accounting"]
 	path = supreme-erp-accounting
-	url = https://gitlab.com/supreme-erp/supreme-erp-accounting.git
+	url = https://github.com/shiplightstudio-cmd/supreme-erp-accounting.git
 
 [submodule "supreme-erp-n8n"]
 	path = supreme-erp-n8n
-	url = https://gitlab.com/supreme-erp/supreme-erp-n8n.git
+	url = https://github.com/shiplightstudio-cmd/supreme-erp-n8n.git
