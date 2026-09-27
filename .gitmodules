@@ -1,15 +1,19 @@
 [submodule "supreme-erp-fe"]
 	path = supreme-erp-fe
 	url = https://gitlab.com/supreme-erp/supreme-erp-fe.git
+	
 [submodule "supreme-erp-be"]
 	path = supreme-erp-be
 	url = https://gitlab.com/supreme-erp/supreme-erp-be.git
+
 [submodule "supreme-erp-storefront"]
 	path = supreme-erp-storefront
 	url = https://gitlab.com/supreme-erp/supreme-erp-storefront.git
+	
 [submodule "supreme-erp-accounting"]
-	path = supreme-erp-storefront
+	path = supreme-erp-accounting
 	url = https://gitlab.com/supreme-erp/supreme-erp-accounting.git
+
 [submodule "supreme-erp-n8n"]
 	path = supreme-erp-n8n
 	url = https://gitlab.com/supreme-erp/supreme-erp-n8n.git
