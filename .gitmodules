@@ -10,3 +10,6 @@
 [submodule "supreme-erp-accounting"]
 	path = supreme-erp-storefront
 	url = https://gitlab.com/supreme-erp/supreme-erp-accounting.git
+[submodule "supreme-erp-n8n"]
+	path = supreme-erp-n8n
+	url = https://gitlab.com/supreme-erp/supreme-erp-n8n.git
