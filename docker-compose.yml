@@ -79,33 +79,23 @@ services:
       start_period: 10s
     command: --log-bin-trust-function-creators=1
 
-  # n8n:
-  #   image: n8nio/n8n:2.40.7
-  #   restart: unless-stopped
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #   environment:
-  #     DB_TYPE: postgresdb
-  #     DB_POSTGRESDB_HOST: postgres
-  #     DB_POSTGRESDB_PORT: 5432
-  #     DB_POSTGRESDB_DATABASE: ${POSTGRES_DB:-supreme_erp}
-  #     DB_POSTGRESDB_USER: ${POSTGRES_USER:-supreme_erp}
-  #     DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD:-supreme_erp_password}
-  #     N8N_HOST: ${N8N_HOST:-localhost}
-  #     N8N_PORT: 5678
-  #     N8N_PROTOCOL: ${N8N_PROTOCOL:-http}
-  #     N8N_EDITOR_BASE_URL: ${N8N_EDITOR_BASE_URL:-http://localhost:5678/}
-  #     WEBHOOK_URL: ${WEBHOOK_URL:-http://localhost:5678/}
-  #     GENERIC_TIMEZONE: ${GENERIC_TIMEZONE:-Asia/Jakarta}
-  #     TZ: ${TZ:-Asia/Jakarta}
-  #     N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:-change-this-to-a-long-random-secret}
-  #     N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
-  #   ports:
-  #     - "5678:5678"
-  #   volumes:
-  #     - n8n_data:/home/node/.n8n
+  n8n:
+    image: supreme-erp/n8n:local
+    build:
+      context: ./supreme-erp-n8n
+      dockerfile: Dockerfile
+    env_file:
+      - ./supreme-erp-n8n/.env
+    restart: unless-stopped
+    environment:
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
 
 volumes:
-  # n8n_data:
+  n8n_data:
   mysql_data:
