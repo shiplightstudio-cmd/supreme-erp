@@ -65,3 +65,19 @@ Use these Sandbox card numbers when testing card payment:
 
 EXP Date: 12/28
 CVV: 123
+
+For setting up n8n you need to copy this file into the n8n docker container:
+
+docker cp supreme-erp-n8n/workflows/daily-finance-digest.json \
+  supreme-erp-n8n-1:/tmp/daily-finance-digest.json
+
+docker exec supreme-erp-n8n-1 \
+  n8n import:workflow --input=/tmp/daily-finance-digest.json
+
+======
+
+docker cp supreme-erp-n8n/workflows/get-finance-digest.json \
+  supreme-erp-n8n-1:/tmp/get-finance-digest.json
+
+docker exec supreme-erp-n8n-1 \
+  n8n import:workflow --input=/tmp/get-finance-digest.json
