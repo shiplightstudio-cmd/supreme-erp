@@ -62,3 +62,6 @@ Use these Sandbox card numbers when testing card payment:
 | --- | --- |
 | Visa: `4811 1111 1111 1114` | Visa: `4811 1111 1111 1114` |
 | Mastercard: `5211 1111 1111 1117` | Mastercard: `5111 1111 1111 1118` |
+
+EXP Date: 12/28
+CVV: 123
